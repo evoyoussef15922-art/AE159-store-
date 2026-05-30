@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Æ159 COLLECTIVE | المتجر الرسمي</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Cinzel:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif'],
+                        cinzel: ['Cinzel', 'serif'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#050505',
+                            card: '#121212',
+                            gray: '#1c1c1c',
+                            lightGray: '#b3b3b3',
+                            accent: '#ffffff'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .hero-bg {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.9)), 
+                        url('1000100982.png') center/cover no-repeat;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .product-img-blend {
+            mix-blend-mode: lighten;
+        }
+    </style>
+</head>
+<body class="bg-brand-dark text-white font-sans overflow-x-hidden antialiased">
+
+    <!-- نافذة الإشعارات التفاعلية -->
+    <div id="toast" class="fixed bottom-5 left-5 bg-white text-black py-3 px-6 rounded shadow-2xl z-50 transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-3">
+        <i class="fa-solid fa-circle-check text-green-600 text-lg"></i>
+        <span id="toast-message" class="font-semibold text-sm">تمت إضافة المنتج بنجاح!</span>
+    </div>
+
+    <!-- الهيدر وقائمة التنقل الرئيسية -->
+    <header class="border-b border-white/10 sticky top-0 bg-brand-dark/95 backdrop-blur-md z-40 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- الشعار وصورة اللوجو الرسمية الهجومية -->
+            <a href="#" class="flex items-center gap-3 group">
+                <img src="1000100626.jpg" alt="Æ159 Logo" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-white transition-all">
+                <span class="font-cinzel font-bold text-lg sm:text-xl tracking-widest">Æ159 COLLECTIVE</span>
+            </a>
+
+            <!-- روابط التنقل -->
+            <nav class="hidden md:flex items-center gap-8 text-xs font-semibold tracking-widest">
+                <a href="#" class="hover:text-brand-lightGray border-b border-white pb-1 transition-all">الرئيسية</a>
+                <a href="#drops" class="hover:text-brand-lightGray transition-all">التشكيلات الجديدة</a>
+                <a href="#essentials" class="hover:text-brand-lightGray transition-all font-cinzel">الأساسيات Æ</a>
+                <a href="#about" class="hover:text-brand-lightGray transition-all">من نحن</a>
+            </nav>
+
+            <!-- سلة المشتريات والتحكم -->
+            <div class="flex items-center gap-4">
+                <button onclick="toggleCart()" class="relative p-2 hover:text-brand-lightGray transition-all">
+                    <i class="fa-solid fa-shopping-bag text-lg"></i>
+                    <span id="cart-count" class="absolute -top-1 -left-1 bg-white text-black text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                </button>
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2 hover:text-brand-lightGray">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- قائمة الهواتف الجانبية -->
+    <div id="mobile-menu" class="fixed inset-0 bg-brand-dark/95 z-50 transform translate-x-full transition-transform duration-300 flex flex-col justify-center p-8">
+        <button onclick="toggleMobileMenu()" class="absolute top-6 left-6 p-2 text-2xl hover:text-brand-lightGray">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <nav class="flex flex-col gap-6 text-xl font-bold tracking-widest text-center">
+            <a href="#" onclick="toggleMobileMenu()" class="hover:text-brand-lightGray">الرئيسية</a>
+            <a href="#drops" onclick="toggleMobileMenu()" class="hover:text-brand-lightGray">التشكيلات الجديدة</a>
+            <a href="#essentials" onclick="toggleMobileMenu()" class="hover:text-brand-lightGray font-cinzel">الأساسيات Æ</a>
+            <a href="#about" onclick="toggleMobileMenu()" class="hover:text-brand-lightGray">من نحن</a>
+        </nav>
+    </div>
+
+    <!-- سلة التسوق الجانبية -->
+    <div id="cart-sidebar" class="fixed inset-0 z-50 pointer-events-none">
+        <div id="cart-overlay" class="absolute inset-0 bg-black/60 opacity-0 transition-opacity duration-300 pointer-events-auto" onclick="toggleCart()"></div>
+        <div id="cart-panel" class="absolute top-0 bottom-0 left-0 w-full max-w-md bg-brand-dark border-r border-white/10 p-6 flex flex-col transform -translate-x-full transition-transform duration-300 pointer-events-auto shadow-2xl">
+            <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                <h3 class="font-cinzel font-bold text-lg tracking-wider">سلة التسوق</h3>
+                <button onclick="toggleCart()" class="p-2 hover:text-brand-lightGray">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div id="cart-items" class="flex-1 overflow-y-auto py-4 space-y-4">
+                <div id="empty-cart-msg" class="h-full flex flex-col items-center justify-center text-brand-lightGray text-center">
+                    <i class="fa-solid fa-bag-shopping text-4xl mb-4 opacity-50"></i>
+                    <p>سلة تسوقك فارغة تماماً حالياً</p>
+                </div>
+            </div>
+            <div id="cart-footer" class="border-t border-white/10 pt-4 space-y-4 hidden">
+                <div class="flex justify-between items-center text-sm font-semibold">
+                    <span>المجموع الفرعي:</span>
+                    <span id="cart-subtotal" class="font-bold">0.00 USD</span>
+                </div>
+                <button onclick="checkout()" class="w-full bg-white text-black py-3 font-bold text-xs tracking-widest hover:bg-brand-lightGray transition-all">إتمام عملية الشراء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة الشراء السريع (Quick Shop Modal) -->
+    <div id="quick-shop-modal" class="fixed inset-0 bg-black/90 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-brand-card border border-white/10 max-w-2xl w-full p-6 relative rounded-lg shadow-2xl overflow-y-auto max-h-[95vh]">
+            <button onclick="closeQuickShop()" class="absolute top-4 left-4 p-2 text-white hover:text-brand-lightGray z-10">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                <div id="modal-product-img-container" class="bg-black/40 rounded flex items-center justify-center p-2 aspect-square overflow-hidden">
+                    <!-- تُستبدل الصورة بالدالة الذكية -->
+                </div>
+                <div class="flex flex-col justify-between">
+                    <div>
+                        <span class="text-[10px] tracking-widest text-brand-lightGray uppercase font-semibold">الإصدار المحدود / Drop 01</span>
+                        <h4 id="modal-product-name" class="font-cinzel font-bold text-xl tracking-wider mt-1">اسم المنتج</h4>
+                        <p id="modal-product-price" class="text-brand-lightGray font-bold mt-2">29.99 USD</p>
+                        
+                        <p class="text-xs text-brand-lightGray mt-4 leading-relaxed">
+                            تيشيرت هيفي ويت (Heavyweight) فاخر من قطن 100% عالي الجودة بقصة فضفاضة مريحة (Oversized Fit). يتميز بطباعة جرافيك عالية الدقة ومقاومة للغسيل على الجهتين الأمامية والخلفية لتعكس أسلوب الشارع العصري والفريد.
+                        </p>
+
+                        <div class="mt-6">
+                            <span class="text-xs font-bold tracking-wider">اختر المقاس:</span>
+                            <div class="flex gap-2 mt-2">
+                                <button class="size-btn border border-white/30 text-xs py-1 px-3 hover:border-white transition-all">S</button>
+                                <button class="size-btn border border-white text-xs py-1 px-3 bg-white text-black font-bold transition-all">M</button>
+                                <button class="size-btn border border-white/30 text-xs py-1 px-3 hover:border-white transition-all">L</button>
+                                <button class="size-btn border border-white/30 text-xs py-1 px-3 hover:border-white transition-all">XL</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="modal-add-btn" class="w-full bg-white text-black py-3 mt-6 font-bold text-xs tracking-widest hover:bg-brand-lightGray transition-all">إضافة إلى السلة</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <!-- قسم الهيرو الرئيسي -->
+        <section class="hero-bg h-[75vh] sm:h-[85vh] flex items-center justify-center text-center px-4 relative">
+            <div class="max-w-4xl space-y-6">
+                <h1 class="font-cinzel text-3xl sm:text-5xl lg:text-7xl font-black tracking-widest leading-tight">
+                    EMBRACE THE BALANCE.<br>
+                    <span class="text-white/90 text-2xl sm:text-4xl block mt-4 font-sans tracking-normal">الطرح الأول متاح الآن حركياً</span>
+                </h1>
+                <div class="pt-4">
+                    <a href="#drops" class="inline-block border border-white py-3 px-8 text-xs font-semibold tracking-widest hover:bg-white hover:text-black transition-all">
+                        تصفح المنتجات
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم THE DROPS (القطع الداكنة) -->
+        <section id="drops" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <h2 class="font-cinzel text-center text-xl sm:text-2xl font-black tracking-widest mb-12 uppercase">
+                THE DROPS | قطع اللون الأسود
+            </h2>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- منتج بورشيه الأسود -->
+                <div class="bg-brand-card border border-white/10 rounded p-4 flex flex-col justify-between hover:border-white/30 transition-all group">
+                    <div class="bg-black/30 rounded overflow-hidden aspect-square flex items-center justify-center p-2 relative">
+                        <img src="1000100982.png" alt="Porsche Black Tee" class="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="mt-4 flex flex-col justify-between flex-1">
+                        <div>
+                            <h3 class="font-cinzel font-bold text-base tracking-wider">GT3 RS TEE (BLACK)</h3>
+                            <p class="text-brand-lightGray text-sm font-bold mt-1">29.99 USD</p>
+                        </div>
+                        <button onclick="openQuickShop('gt3-black')" class="w-full border border-white/50 py-2 mt-4 text-xs font-semibold tracking-widest hover:bg-white hover:text-black transition-all">
+                            QUICK SHOP
+                        </button>
+                    </div>
+                </div>
+
+                <!-- منتج الانضباط الأسود -->
+                <div class="bg-brand-card border border-white/10 rounded p-4 flex flex-col justify-between hover:border-white/30 transition-all group">
+                    <div class="bg-black/30 rounded overflow-hidden aspect-square flex items-center justify-center p-2 relative">
+                        <img src="1000100983.png" alt="Discipline Black Tee" class="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="mt-4 flex flex-col justify-between flex-1">
+                        <div>
+                            <h3 class="font-cinzel font-bold text-base tracking-wider">DISCIPLINE TEE (BLACK)</h3>
+                            <p class="text-brand-lightGray text-sm font-bold mt-1">29.99 USD</p>
+                        </div>
+                        <button onclick="openQuickShop('discipline-black')" class="w-full border border-white/50 py-2 mt-4 text-xs font-semibold tracking-widest hover:bg-white hover:text-black transition-all">
+                            QUICK SHOP
+                        </button>
+                    </div>
+                </div>
+
+                <!-- منتج التوازن الأسود -->
+                <div class="bg-brand-card border border-white/10 rounded p-4 flex flex-col justify-between hover:border-white/30 transition-all group">
+                    <div class="bg-black/30 rounded overflow-hidden aspect-square flex items-center justify-center p-2 relative">
+                        <img src="1000100984.png" alt="Balance Black Tee" class="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="mt-4 flex flex-col justify-between flex-1">
+                        <div>
+                            <h3 class="font-cinzel font-bold text-base tracking-wider">BALANCE TEE (BLACK)</h3>
+                            <p class="text-brand-lightGray text-sm font-bold mt-1">29.99 USD</p>
+                        </div>
+                        <button onclick="openQuickShop('balance-black')" class="w-full border border-white/50 py-2 mt-4 text-xs font-semibold tracking-widest hover:bg-white hover:text-black transition-all">
+                            QUICK SHOP
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم THE ÆSSENTIALS (القطع البيضاء النقية) -->
+        <section id="essentials" class="bg-brand-gray py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="font-cinzel text-center text-xl sm:text-2xl font-black tracking-widest mb-12 uppercase text-white">
+                    THE ÆSSENTIALS | قطع اللون الأبيض
+                </h2>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- منتج التوازن الأبيض -->
+                    <div class="bg-white text-black p-4 rounded flex flex-col justify-between group">
+                        <div class="bg-gray-100 rounded overflow-hidden aspect-square flex items-center justify-center p-2">
+                            <img src="1000100820.jpg" alt="Balance White Tee" class="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="mt-4 flex flex-col justify-between flex-1">
+                            <div>
+                                <h3 class="font-cinzel font-bold text-base tracking-wider text-black">BALANCE TEE (WHITE)</h3>
+                                <p class="text-gray-600 text-sm font-bold mt-1">29.99 USD</p>
+                            </div>
+                            <button onclick="openQuickShop('balance-white')" class="w-full bg-black text-white py-2 mt-4 text-xs font-semibold tracking-widest hover:bg-zinc-800 transition-all">
+                                QUICK SHOP
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- منتج الانضباط الأبيض -->
+                    <div class="bg-white text-black p-4 rounded flex flex-col justify-between group">
+                        <div class="bg-gray-100 rounded overflow-hidden aspect-square flex items-center justify-center p-2">
+                            <img src="1000100821.jpg" alt="Discipline White Tee" class="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="mt-4 flex flex-col justify-between flex-1">
+                            <div>
+                                <h3 class="font-cinzel font-bold text-base tracking-wider text-black">DISCIPLINE TEE (WHITE)</h3>
+                                <p class="text-gray-600 text-sm font-bold mt-1">29.99 USD</p>
+                            </div>
+                            <button onclick="openQuickShop('discipline-white')" class="w-full bg-black text-white py-2 mt-4 text-xs font-semibold tracking-widest hover:bg-zinc-800 transition-all">
+                                QUICK SHOP
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- منتج بورشيه الأبيض -->
+                    <div class="bg-white text-black p-4 rounded flex flex-col justify-between group">
+                        <div class="bg-gray-100 rounded overflow-hidden aspect-square flex items-center justify-center p-2">
+                            <img src="1000100822.jpg" alt="Porsche White Tee" class="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="mt-4 flex flex-col justify-between flex-1">
+                            <div>
+                                <h3 class="font-cinzel font-bold text-base tracking-wider text-black">GT3 RS TEE (WHITE)</h3>
+                                <p class="text-gray-600 text-sm font-bold mt-1">29.99 USD</p>
+                            </div>
+                            <button onclick="openQuickShop('gt3-white')" class="w-full bg-black text-white py-2 mt-4 text-xs font-semibold tracking-widest hover:bg-zinc-800 transition-all">
+                                QUICK SHOP
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم ميثاقنا عن البراند -->
+        <section id="about" class="relative py-28 bg-brand-dark overflow-hidden flex items-center justify-center border-t border-white/5">
+            <div class="absolute inset-0 flex items-center justify-center select-none pointer-events-none opacity-5">
+                <img src="1000100626.jpg" alt="Watermark" class="w-96 h-96 object-contain filter invert">
+            </div>
+            <div class="max-w-4xl mx-auto px-6 text-center relative z-10 space-y-4">
+                <h2 class="font-cinzel text-xl sm:text-2xl font-black tracking-widest uppercase">OUR CODE | ميثاقنا</h2>
+                <p class="text-sm sm:text-base text-brand-lightGray leading-relaxed max-w-2xl mx-auto">
+                    علامة أزياء صُممت لتعكس الخطوط الدقيقة الفاصلة بين القوة والانضباط. كل قطعة هي تجسيد للتوازن البصري والروحي من خلال خامات قطنية ثقيلة وقصات هندسية دقيقة تحاكي ثقافة ملابس الشارع العالمية الجريئة.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- فوتر كوليكتيف -->
+    <footer class="bg-[#0b0b0b] border-t border-white/10 pt-12 pb-8 text-xs text-brand-lightGray">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <img src="1000100626.jpg" alt="Footer Logo" class="w-8 h-8 rounded-full object-cover grayscale opacity-70">
+                <span class="font-cinzel text-white font-black tracking-widest text-sm">Æ159 COLLECTIVE</span>
+            </div>
+            <p class="text-[10px] text-brand-lightGray/40">جميع الحقوق محفوظة &copy; 2026</p>
+        </div>
+    </footer>
+
+    <!-- منطق وبرمجة المتجر الإلكتروني الجانبي والمودال والتفاعلات -->
+    <script>
+        const productsData = {
+            'gt3-black': { name: 'GT3 RS TEE (BLACK)', price: 29.99, img: '1000100982.png' },
+            'discipline-black': { name: 'DISCIPLINE TEE (BLACK)', price: 29.99, img: '1000100983.png' },
+            'balance-black': { name: 'BALANCE TEE (BLACK)', price: 29.99, img: '1000100984.png' },
+            'balance-white': { name: 'BALANCE TEE (WHITE)', price: 29.99, img: '1000100820.jpg' },
+            'discipline-white': { name: 'DISCIPLINE TEE (WHITE)', price: 29.99, img: '1000100821.jpg' },
+            'gt3-white': { name: 'GT3 RS TEE (WHITE)', price: 29.99, img: '1000100822.jpg' }
+        };
+
+        let cart = [];
+        let currentSize = 'M';
+
+        function toggleCart() {
+            const panel = document.getElementById('cart-panel');
+            const overlay = document.getElementById('cart-overlay');
+            const sidebar = document.getElementById('cart-sidebar');
+
+            if (panel.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('pointer-events-none');
+                panel.classList.remove('-translate-x-full');
+                overlay.classList.replace('opacity-0', 'opacity-100');
+            } else {
+                panel.classList.add('-translate-x-full');
+                overlay.classList.replace('opacity-100', 'opacity-0');
+                setTimeout(() => sidebar.classList.add('pointer-events-none'), 300);
+            }
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('translate-x-full');
+        }
+
+        function openQuickShop(key) {
+            const p = productsData[key];
+            if (!p) return;
+
+            document.getElementById('modal-product-name').innerText = p.name;
+            document.getElementById('modal-product-price').innerText = `${p.price.toFixed(2)} USD`;
+            document.getElementById('modal-product-img-container').innerHTML = `<img src="${p.img}" alt="${p.name}" class="w-full h-full object-contain">`;
+
+            currentSize = 'M';
+            setupSizeButtons();
+
+            const modal = document.getElementById('quick-shop-modal');
+            modal.classList.remove('pointer-events-none', 'opacity-0');
+            modal.classList.add('opacity-100');
+
+            document.getElementById('modal-add-btn').onclick = function() {
+                addToCart(key, currentSize);
+                closeQuickShop();
+            };
+        }
+
+        function closeQuickShop() {
+            const modal = document.getElementById('quick-shop-modal');
+            modal.classList.remove('opacity-100');
+            modal.classList.add('pointer-events-none', 'opacity-0');
+        }
+
+        function setupSizeButtons() {
+            document.querySelectorAll('.size-btn').forEach(btn => {
+                if (btn.innerText === currentSize) {
+                    btn.className = 'size-btn border border-white text-xs py-1 px-3 bg-white text-black font-bold transition-all';
+                } else {
+                    btn.className = 'size-btn border border-white/30 text-xs py-1 px-3 hover:border-white text-white transition-all';
+                }
+                btn.onclick = () => { currentSize = btn.innerText; setupSizeButtons(); };
+            });
+        }
+
+        function addToCart(key, size) {
+            const prod = productsData[key];
+            const existing = cart.find(item => item.key === key && item.size === size);
+
+            if (existing) {
+                existing.qty++;
+            } else {
+                cart.push({ key, name: prod.name, price: prod.price, size, qty: 1, img: prod.img });
+            }
+            updateCartUI();
+            showToast(`تمت إضافة ${prod.name} بمقاس [${size}] للسلة.`);
+        }
+
+        function updateCartUI() {
+            const itemsContainer = document.getElementById('cart-items');
+            const emptyMsg = document.getElementById('empty-cart-msg');
+            const footer = document.getElementById('cart-footer');
+            const countBadge = document.getElementById('cart-count');
+            
+            let totalQty = 0, subtotal = 0;
+
+            if (cart.length === 0) {
+                emptyMsg.style.display = 'flex';
+                footer.classList.add('hidden');
+                itemsContainer.innerHTML = '';
+            } else {
+                emptyMsg.style.display = 'none';
+                footer.classList.remove('hidden');
+                
+                itemsContainer.innerHTML = cart.map((item, index) => {
+                    totalQty += item.qty;
+                    subtotal += (item.price * item.qty);
+                    return `
+                        <div class="flex items-center gap-4 bg-white/5 p-3 rounded border border-white/5">
+                            <img src="${item.img}" class="w-14 h-14 object-contain bg-black/20 p-1 rounded">
+                            <div class="flex-1">
+                                <h4 class="text-[11px] font-bold tracking-wider">${item.name}</h4>
+                                <div class="text-[10px] text-brand-lightGray">المقاس: ${item.size}</div>
+                                <div class="flex items-center justify-between mt-2">
+                                    <div class="flex items-center gap-2 border border-white/10 px-2 py-0.5 rounded">
+                                        <button onclick="changeQty(${index}, -1)" class="text-xs text-brand-lightGray hover:text-white">-</button>
+                                        <span class="text-xs font-semibold">${item.qty}</span>
+                                        <button onclick="changeQty(${index}, 1)" class="text-xs text-brand-lightGray hover:text-white">+</button>
+                                    </div>
+                                    <span class="text-xs font-bold">${(item.price * item.qty).toFixed(2)} USD</span>
+                                </div>
+                            </div>
+                        </div>`;
+                }).join('');
+            }
+            countBadge.innerText = totalQty;
+            document.getElementById('cart-subtotal').innerText = `${subtotal.toFixed(2)} USD`;
+        }
+
+        function changeQty(index, amount) {
+            cart[index].qty += amount;
+            if (cart[index].qty <= 0) cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').innerText = msg;
+            toast.classList.replace('translate-y-20', 'translate-y-0');
+            toast.classList.replace('opacity-0', 'opacity-100');
+            setTimeout(() => {
+                toast.classList.replace('translate-y-0', 'translate-y-20');
+                toast.classList.replace('opacity-100', 'opacity-0');
+            }, 3000);
+        }
+
+        function checkout() {
+            alert('تمت محاكاة طلبك بنجاح! شكراً لك.');
+            cart = []; updateCartUI(); toggleCart();
+        }
+    </script>
+</body>
+</html>
